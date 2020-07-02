@@ -1,2 +1,2 @@
-# Travel-salesman-problem
- This project was created for study purpose, mostly to try MVC and OOP in python within tkinter for GUI
+# Travel salesman problem
+ Created with the purpose of studying MVC and OOP in Python with tkinter as GUI.
