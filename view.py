@@ -50,6 +50,18 @@ class View(tk.Tk):
         self.draw_cities(best_path, colorful=True, width=0)
         self._city_numbers(best_path)
 
+    def print_coordinates(self, coordinates):
+        self.text_coordinates.delete("1.0", "end")
+        for coor in sorted(coordinates):
+            x, y = coor
+            txt = f"{x}, {y}\n"
+            self.text_coordinates.insert("insert", txt)
+
+    def default_text_coordinates(self):
+        self.text_coordinates.delete("1.0", "end")
+        self.text_coordinates.insert("insert", DEFAULT_TEXT)
+
+
     def _city_numbers(self, best_path):
         col = 255
         for i in range(len(best_path)):

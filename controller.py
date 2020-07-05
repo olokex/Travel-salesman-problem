@@ -34,6 +34,7 @@ class Controller():
             if needless(user_coor):
                 self.model.validate_entryCities(self.view.entryCities.get())
                 self.model.generate_coordinates()
+                self.view.print_coordinates(self.model.coordinates)
             else:    
                 self.model.parse_coordinates(user_coor)
 
@@ -67,6 +68,7 @@ class Controller():
         self.timer = TIMER
         self.iteration_counter = 0
         self.view.update_labels(0, float("inf"))
+        self.view.default_text_coordinates()
 
     def update(self):
         actual_distance = self.model.distance(self.view.lines_id)
