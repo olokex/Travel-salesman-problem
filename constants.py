@@ -1,6 +1,23 @@
-TIMER = 10
-ITERATIONS = 1000
-CITY_COUNT = 50
+TIMER = 100
+ITERATIONS = 10
+CITY_COUNT = 10
 WIDTH = 1200
 HEIGHT = 800
 INDENTATION_EDGE = 100
+WIDTH_MAX = WIDTH - INDENTATION_EDGE
+HEIGHT_MAX = HEIGHT - INDENTATION_EDGE
+WIDTH_MIN = INDENTATION_EDGE
+HEIGHT_MIN = INDENTATION_EDGE
+RADIUS = 20
+MIN_CITY = 4
+DEFAULT_TEXT = f"""\
+Line represents
+a city.
+Each line only one
+coordinate x,y.
+Coordinates has to  be in certain range
+x: {WIDTH_MIN}-{WIDTH_MAX}
+y: {HEIGHT_MIN}-{HEIGHT_MAX}
+
+Otherwise gonna be 
+generated randomly."""

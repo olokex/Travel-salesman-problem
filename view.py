@@ -1,5 +1,6 @@
 import tkinter as tk
-import constants
+import tkinter.messagebox 
+from constants import *
 from utils import *
 
 class View(tk.Tk):
@@ -19,11 +20,11 @@ class View(tk.Tk):
         self._make_label("Coordinates")
         self._make_text_coordinates()
         self._make_label("Iterations")
-        self.entryIterations = self._make_entry(constants.ITERATIONS)
+        self.entryIterations = self._make_entry(ITERATIONS)
         self._make_label("Cities")
-        self.entryCities = self._make_entry(constants.CITY_COUNT)
-        self._make_label("Timer")
-        self.entryTimer = self._make_entry(constants.TIMER)
+        self.entryCities = self._make_entry(CITY_COUNT)
+        self._make_label("Timer (ms)")
+        self.entryTimer = self._make_entry(TIMER)
         self._make_button("start")
         self._make_button("reset")
 
@@ -34,11 +35,14 @@ class View(tk.Tk):
         self.after_root = self.after(timer, self.controller.update)
 
     def stop_view(self):
-        self.after_cancel(self.after_root)
+        if self.running:
+            self.after_cancel(self.after_root)
     
     def clear_canvas(self):
         self.canvas.delete("all")
 
+    def invalid_input(self, message):
+        tkinter.messagebox.showerror("Invalid input", message)
 
     def draw_best_path(self, best_path):
         self.delete_connections()
@@ -60,7 +64,7 @@ class View(tk.Tk):
             self.canvas.create_window(x, y, window=label)
 
     def update_labels(self, iter, best_distance):
-        self.labelIterationsCanvas["text"] = f"iterations: {iter}"
+        self.labelIterationsCanvas["text"] = f"iteration: {iter}"
         dst = f"best distance: {best_distance:.4f}"
         self.labelBestDistanceCanvas["text"] = dst
 
@@ -86,6 +90,7 @@ class View(tk.Tk):
 
     def _make_text_coordinates(self):
         self.text_coordinates = tk.Text(self.side_frm, width=20)
+        self.text_coordinates.insert(tk.INSERT, DEFAULT_TEXT)
         self.text_coordinates.pack(pady=self.PAD)
 
     def _make_button(self, txt):
@@ -93,17 +98,22 @@ class View(tk.Tk):
         if txt == "reset":
             cmd = self.controller.reset
         btn = tk.Button(self.side_frm,
-            width=8, bd=0, relief='flat', font="Helvetica 12", text=txt, command=cmd)
+                width = 8, 
+                bd = 0,
+                relief = 'flat',
+                font = "Helvetica 12",
+                text = txt,
+                command = cmd)
         btn.pack(side="left")
 
     def _make_canvas(self):
         self.canvas = tk.Canvas(
-            self.main_frm, width=constants.WIDTH, height=constants.HEIGHT)
+            self.main_frm, width=WIDTH, height=HEIGHT)
         self.canvas.pack()
 
     def _make_canvas_labels(self):
         canvas_frame = tk.Frame(self.main_frm)
-        canvas_frame.place(x=0, y=constants.HEIGHT-28)
+        canvas_frame.place(x=0, y=HEIGHT-28)
         self.labelIterationsCanvas = tk.Label(
             canvas_frame, text="iteration: 0", font="Helvetica 12")
         self.labelIterationsCanvas.pack(side="left")
@@ -111,7 +121,7 @@ class View(tk.Tk):
             canvas_frame, text="best distance: inf", font="Helvetica 12")
         self.labelBestDistanceCanvas.pack(side="left")
 
-    def _create_circle(self, x, y, r=20, **kwargs):
+    def _create_circle(self, x, y, r=RADIUS, **kwargs):
         self.canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
     def draw_cities(self, coor, colorful=False, **kwargs):
@@ -123,7 +133,7 @@ class View(tk.Tk):
                 color -= int(255/len(coor))
         else:        
             for x, y in coor:
-                self._create_circle(x, y, 20, fill="gray", **kwargs)
+                self._create_circle(x, y, RADIUS, fill="gray", **kwargs)
 
     def connect_cities(self, coor, **kwargs):
         self.lines_id = {}

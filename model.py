@@ -1,33 +1,49 @@
 from random import randint
-import constants
+from constants import *
+from exceptions import *
 
 class Model():
     def __init__(self):
         self.coordinates = []
-        self.city_count = constants.CITY_COUNT
+        self.city_count = CITY_COUNT
         self.users_coordinates = False
 
     def parse_coordinates(self, text):
-        tmp = text.split("\n")
-        try:
-            for each in tmp:
-                x, y = each.split(",")
-                self.coordinates.append((int(x), int(y)))
-        except:
-            self.generate_coordinates()
+        lines = text.splitlines()
+        count = len(lines)
+        if count < MIN_CITY:
+            raise InvalidCoordinatesInput(count)
+
+        for i, line in enumerate(lines):
+            try:
+                coor = line.strip().split(",")
+                x = int(coor[0])
+                y = int(coor[1])
+                self._in_allowed_range(x, WIDTH_MIN, WIDTH_MAX)
+                self._in_allowed_range(y, HEIGHT_MIN, HEIGHT_MAX)
+                self.coordinates.append((x, y))
+            except InvalidAreaRange:
+                raise InvalidCoordinatesRangeIndexInput(i)
+            except Exception:
+                raise InvalidCoordinatesIndexInput(i)
+        self.city_count = len(self.coordinates)
+
+
+    def _in_allowed_range(self, var, min, max):
+        if not (min <= var <= max):
+            raise InvalidAreaRange
+
 
     def generate_coordinates(self):
         for i in range(self.city_count):
-            x = randint(constants.INDENTATION_EDGE,
-                    constants.WIDTH - constants.INDENTATION_EDGE)
-            y = randint(constants.INDENTATION_EDGE,
-                    constants.HEIGHT - constants.INDENTATION_EDGE)
+            x = randint(WIDTH_MIN, WIDTH_MAX)
+            y = randint(HEIGHT_MIN, HEIGHT_MAX)
             self.coordinates.append((x, y))
 
     def shuffle(self):
-        st = randint(0, len(self.coordinates) - 1)
-        nd = randint(0, len(self.coordinates) - 1)
         sc = self.coordinates
+        st = randint(0, len(sc) - 1)
+        nd = randint(0, len(sc) - 1)
         sc[st], sc[nd] = sc[nd], sc[st]
 
     def _distance_two_points(self, coordinates):
@@ -43,5 +59,27 @@ class Model():
             dist += self._distance_two_points(coor)
         return dist
 
-    def validate():
-        ...
+    def validate_entryCities(self, input):
+        if not input.isdigit():
+            raise InvalidCityInput(input)
+        city_count = int(input)
+        if not (city_count >= MIN_CITY):
+            raise InvalidCityInput(input)
+        self.city_count = city_count
+
+
+    def validate_entryTimer(self, input):
+        if not input.isdigit():
+            raise InvalidTimerInput(input)    
+        timer = int(input)
+        if not (timer >= 10):
+            raise InvalidTimerInput(input)    
+        return timer
+
+    def validate_entryIterations(self, input):
+        if not input.isdigit():
+            raise InvalidIterationInput(input)    
+        iteration = int(input)
+        if not (iteration >= 1):
+            raise InvalidIterationInput(input)    
+        return iteration
