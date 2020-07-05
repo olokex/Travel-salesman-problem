@@ -2,6 +2,7 @@ from random import randint
 from constants import *
 from exceptions import *
 
+
 class Model():
     def __init__(self):
         self.coordinates = []

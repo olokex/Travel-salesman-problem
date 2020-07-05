@@ -61,7 +61,6 @@ class View(tk.Tk):
         self.text_coordinates.delete("1.0", "end")
         self.text_coordinates.insert("insert", DEFAULT_TEXT)
 
-
     def _city_numbers(self, best_path):
         col = 255
         for i in range(len(best_path)):

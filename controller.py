@@ -59,6 +59,8 @@ class Controller():
 
     def reset(self):
         self.view.running = False
+        if not self.valid_input:
+            self.view.default_text_coordinates()
         self.valid_input = False
         self.view.clear_canvas()
         self.view.stop_view()
@@ -68,24 +70,24 @@ class Controller():
         self.timer = TIMER
         self.iteration_counter = 0
         self.view.update_labels(0, float("inf"))
-        self.view.default_text_coordinates()
 
     def update(self):
-        actual_distance = self.model.distance(self.view.lines_id)
-        if actual_distance < self.best_distance:
-            self.best_distance = actual_distance
-            self.best_path = self.model.coordinates[:]
         if not (self.iterations > self.iteration_counter):
             self.view.stop_view()
             self.view.draw_best_path(self.best_path)
             return
+        actual_distance = self.model.distance(self.view.lines_id)
+        if actual_distance < self.best_distance:
+            self.best_distance = actual_distance
+            self.best_path = self.model.coordinates[:]
 
-        self.model.shuffle()
-        self.view.delete_connections()
-        self.view.connect_cities(self.model.coordinates)
-        self.view.set_timer(self.timer)
-        self.iteration_counter += 1
-        self.view.update_labels(self.iteration_counter, self.best_distance)
+        if self.view.running:
+            self.model.shuffle()
+            self.view.delete_connections()
+            self.view.connect_cities(self.model.coordinates)
+            self.view.set_timer(self.timer)
+            self.iteration_counter += 1
+            self.view.update_labels(self.iteration_counter, self.best_distance)
 
 if __name__ == "__main__":
     tsp = Controller()
