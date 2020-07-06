@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from model import Model
 from view import View
 from constants import *
@@ -5,12 +8,16 @@ from utils import *
 from exceptions import *
 
 class Controller():
+    # Main class that controlls all the events.
     def __init__(self):
         self.model = Model()
         self.view = View(self)
         self.timer = TIMER
         self.iteration_counter = 0
+        # Distance has to start with high number,
+        # because even the first one can be the shortest.
         self.best_distance = float("inf")
+        # Check for user's input.
         self.valid_input = False
         self.best_path = []
 
@@ -29,9 +36,14 @@ class Controller():
         self.view.set_timer(self.timer)
 
     def _get_user_inputs(self):
+        # Validates user's input
+        # for futher info read constants.py and model.
         try:
             user_coor = self.view.text_coordinates.get("1.0", "end-1c")
             if needless(user_coor):
+                # If there is not user's input
+                # it will generate coordinates randomly
+                # and print out coordinates in the textfield.
                 self.model.validate_entryCities(self.view.entryCities.get())
                 self.model.generate_coordinates()
                 self.view.print_coordinates(self.model.coordinates)
@@ -58,6 +70,10 @@ class Controller():
             self.valid_input = True
 
     def reset(self):
+        # Resets NOT all the values to default the main purpose
+        # is to observe how iterations, random seed are influencing the paths
+        # wouldn't be nice to reset all those again for each run.
+        # Coordinates remains after reset too, rest is reseted.
         self.view.running = False
         if not self.valid_input:
             self.view.default_text_coordinates()
@@ -72,6 +88,9 @@ class Controller():
         self.view.update_labels(0, float("inf"))
 
     def update(self):
+        # This function is called after every iteration (X ms - timer),
+        # where two coordinates are swapped.
+        # If the limit is reached, iteration stops and the best path rendered.
         if not (self.iterations > self.iteration_counter):
             self.view.stop_view()
             self.view.draw_best_path(self.best_path)

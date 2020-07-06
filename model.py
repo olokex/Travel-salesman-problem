@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from random import randint
 from constants import *
 from exceptions import *
@@ -36,23 +39,27 @@ class Model():
 
 
     def generate_coordinates(self):
+        # Generates coordinates x,y in shrinked area, 100 px from each side.
+        # Avoiding to generate city with 0,0; 0,Y; X,0; etc.
         for i in range(self.city_count):
             x = randint(WIDTH_MIN, WIDTH_MAX)
             y = randint(HEIGHT_MIN, HEIGHT_MAX)
             self.coordinates.append((x, y))
 
     def shuffle(self):
+        # Randomly swap two coordinates - new path established.
         sc = self.coordinates
         st = randint(0, len(sc) - 1)
         nd = randint(0, len(sc) - 1)
         sc[st], sc[nd] = sc[nd], sc[st]
 
     def _distance_two_points(self, coordinates):
-            x1 = coordinates[0]
-            y1 = coordinates[1]
-            x2 = coordinates[2]
-            y2 = coordinates[3]
-            return ((x1 - x2)**2 + (y1 - y2)**2)**(1/2)
+        # Nothing else than Pythagoras theorem.
+        x1 = coordinates[0]
+        y1 = coordinates[1]
+        x2 = coordinates[2]
+        y2 = coordinates[3]
+        return ((x1 - x2)**2 + (y1 - y2)**2)**(1/2)
 
     def distance(self, lines_id):
         dist = 0.0

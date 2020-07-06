@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import tkinter as tk
 import tkinter.messagebox 
 from constants import *
@@ -32,9 +35,11 @@ class View(tk.Tk):
        self.mainloop()
 
     def set_timer(self, timer):
+        # In tkinker you have to re-call a function to keep updated values.
         self.after_root = self.after(timer, self.controller.update)
 
     def stop_view(self):
+        # Breaks the after call because was causing a bug.
         if self.running:
             self.after_cancel(self.after_root)
     
@@ -45,12 +50,16 @@ class View(tk.Tk):
         tkinter.messagebox.showerror("Invalid input", message)
 
     def draw_best_path(self, best_path):
+        # Draws the best path that was found.
+        # Best path is highlighted with red and wider line,
+        # also decided to implement numbers for each city (where to start).
         self.delete_connections()
         self.connect_cities(best_path, width=3, fill="red")
         self.draw_cities(best_path, colorful=True, width=0)
         self._city_numbers(best_path)
 
     def print_coordinates(self, coordinates):
+        # Fill textfield with coordinates which were generated.
         self.text_coordinates.delete("1.0", "end")
         for coor in sorted(coordinates):
             x, y = coor
@@ -61,18 +70,6 @@ class View(tk.Tk):
         self.text_coordinates.delete("1.0", "end")
         self.text_coordinates.insert("insert", DEFAULT_TEXT)
 
-    def _city_numbers(self, best_path):
-        col = 255
-        for i in range(len(best_path)):
-            label = tk.Label(self.canvas,
-                text=i,
-                bg=rgb2hex((col, 0, 0)),
-                fg="white",
-                font="Helvetica 16 bold")
-            col -= int(255/len(best_path) )
-            x = best_path[i][0]
-            y = best_path[i][1]
-            self.canvas.create_window(x, y, window=label)
 
     def update_labels(self, iter, best_distance):
         self.labelIterationsCanvas["text"] = f"iteration: {iter}"
@@ -105,13 +102,15 @@ class View(tk.Tk):
         self.text_coordinates.pack(pady=self.PAD)
 
     def _make_button(self, txt):
+        # A bit ugly solution but only for two buttons...
+        # This seems more reasonable to me.
         cmd = self.controller.start
         if txt == "reset":
             cmd = self.controller.reset
         btn = tk.Button(self.side_frm,
                 width = 8, 
                 bd = 0,
-                relief = 'flat',
+                relief = "flat",
                 font = "Helvetica 12",
                 text = txt,
                 command = cmd)
@@ -133,9 +132,30 @@ class View(tk.Tk):
         self.labelBestDistanceCanvas.pack(side="left")
 
     def _create_circle(self, x, y, r=RADIUS, **kwargs):
+        # Because tkinter doesn't provide a circle by given x, y and radius
+        # but only by x1, y1, x2, y3 (impractical).
+        # I've made my own method that works in this way.
         self.canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
+    def _city_numbers(self, best_path):
+        # This function add a number label for each city.
+        # I decided to make colors to scale with every number.
+        # It begins with 255 - full red here, and is substracting for each city.
+        col = 255
+        for i in range(len(best_path)):
+            label = tk.Label(self.canvas,
+                text=i,
+                bg=rgb2hex((col, 0, 0)),
+                fg="white",
+                font="Helvetica 16 bold")
+            col -= int(255/len(best_path) )
+            x = best_path[i][0]
+            y = best_path[i][1]
+            self.canvas.create_window(x, y, window=label)
+
     def draw_cities(self, coor, colorful=False, **kwargs):
+        # Similar to previous method that scale colors with each city.
+        # This is similar but only for city - circle
         if colorful:
             color = 255
             for x, y in coor:
@@ -147,6 +167,9 @@ class View(tk.Tk):
                 self._create_circle(x, y, RADIUS, fill="gray", **kwargs)
 
     def connect_cities(self, coor, **kwargs):
+        # Each connection have to be stored.
+        # One possible solution would be have another frame and clear
+        # only the fram but this is also usefull for measuring distance in model
         self.lines_id = {}
         for i in range(len(coor) - 1):
             a = coor[i]
