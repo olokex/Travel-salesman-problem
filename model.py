@@ -4,15 +4,20 @@
 from random import randint
 from constants import *
 from exceptions import *
+from math import sqrt
 
 
 class Model():
+    """Main Model class responsible for business logic."""
+
+
     def __init__(self):
         self.coordinates = []
-        self.city_count = CITY_COUNT
-        self.users_coordinates = False
+        self.cityCount = CITY_COUNT
+        self.userCoordinates = False
 
-    def parse_coordinates(self, text):
+
+    def parseCoordinates(self, text):
         lines = text.splitlines()
         count = len(lines)
         if count < MIN_CITY:
@@ -23,60 +28,61 @@ class Model():
                 coor = line.strip().split(",")
                 x = int(coor[0])
                 y = int(coor[1])
-                self._in_allowed_range(x, WIDTH_MIN, WIDTH_MAX)
-                self._in_allowed_range(y, HEIGHT_MIN, HEIGHT_MAX)
+                self._isInAllowedRange(x, WIDTH_MIN, WIDTH_MAX)
+                self._isInAllowedRange(y, HEIGHT_MIN, HEIGHT_MAX)
                 self.coordinates.append((x, y))
             except InvalidAreaRange:
                 raise InvalidCoordinatesRangeIndexInput(i)
             except Exception:
                 raise InvalidCoordinatesIndexInput(i)
-        self.city_count = len(self.coordinates)
+        self.cityCount = len(self.coordinates)
 
 
-    def _in_allowed_range(self, var, min, max):
+    def _isInAllowedRange(self, var, min, max):
         if not (min <= var <= max):
             raise InvalidAreaRange
 
 
-    def generate_coordinates(self):
-        # Generates coordinates x,y in shrinked area, 100 px from each side.
-        # Avoiding to generate city with 0,0; 0,Y; X,0; etc.
-        for i in range(self.city_count):
+    def generateCoordinates(self):
+        """Generates coordinates x,y in shrinked area, 100 px from each side.
+        Avoiding to generate city with 0,0; 0,Y; X,0; etc.
+        """
+        for i in range(self.cityCount):
             x = randint(WIDTH_MIN, WIDTH_MAX)
             y = randint(HEIGHT_MIN, HEIGHT_MAX)
             self.coordinates.append((x, y))
 
     def shuffle(self):
-        # Randomly swap two coordinates - new path established.
+        """Randomly swap two coordinates - new path established."""
         sc = self.coordinates
         st = randint(0, len(sc) - 1)
         nd = randint(0, len(sc) - 1)
         sc[st], sc[nd] = sc[nd], sc[st]
 
-    def _distance_two_points(self, coordinates):
-        # Nothing else than Pythagoras theorem.
+    def _distanceTwoPoints(self, coordinates):
+        """Nothing else than Pythagoras theorem."""
         x1 = coordinates[0]
         y1 = coordinates[1]
         x2 = coordinates[2]
         y2 = coordinates[3]
-        return ((x1 - x2)**2 + (y1 - y2)**2)**(1/2)
+        return sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
     def distance(self, lines_id):
         dist = 0.0
         for coor in lines_id.keys():
-            dist += self._distance_two_points(coor)
+            dist += self._distanceTwoPoints(coor)
         return dist
 
-    def validate_entryCities(self, input):
+    def validateEntryCities(self, input):
         if not input.isdigit():
             raise InvalidCityInput(input)
-        city_count = int(input)
-        if not (city_count >= MIN_CITY):
+        cityCount = int(input)
+        if not (cityCount >= MIN_CITY):
             raise InvalidCityInput(input)
-        self.city_count = city_count
+        self.cityCount = cityCount
 
 
-    def validate_entryTimer(self, input):
+    def validateEntryTimer(self, input):
         if not input.isdigit():
             raise InvalidTimerInput(input)    
         timer = int(input)
@@ -84,7 +90,7 @@ class Model():
             raise InvalidTimerInput(input)    
         return timer
 
-    def validate_entryIterations(self, input):
+    def validateEntryIterations(self, input):
         if not input.isdigit():
             raise InvalidIterationInput(input)    
         iteration = int(input)

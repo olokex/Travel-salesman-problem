@@ -7,106 +7,119 @@ from constants import *
 from utils import *
 from exceptions import *
 
+
 class Controller():
-    # Main class that controlls all the events.
+    """Main class that controlls all the events.
+    If you want to test the code you should run this file."""
+
+
     def __init__(self):
         self.model = Model()
         self.view = View(self)
         self.timer = TIMER
-        self.iteration_counter = 0
-        # Distance has to start with high number,
-        # because even the first one can be the shortest.
-        self.best_distance = float("inf")
-        # Check for user's input.
-        self.valid_input = False
-        self.best_path = []
+        self.iterationCounter = 0
+        """Distance has to start with high number,
+        because even the first one can be the shortest."""
+        self.bestDistance = float("inf")
+        """Check for user's input."""
+        self.validInput = False
+        self.bestPath = []
+
 
     def main(self):
         self.view.main()
 
+
     def start(self):
         if self.view.running == True:
             return
-        self._get_user_inputs()
-        if self.valid_input == False:
+        self._getUserInputs()
+        if self.validInput == False:
             return
         self.view.running = True
-        self.view.draw_cities(self.model.coordinates)
-        self.view.connect_cities(self.model.coordinates)
-        self.view.set_timer(self.timer)
+        self.view.drawCities(self.model.coordinates)
+        self.view.connectCities(self.model.coordinates)
+        self.view.setTimer(self.timer)
 
-    def _get_user_inputs(self):
-        # Validates user's input
-        # for futher info read constants.py and model.
+
+    def _getUserInputs(self):
+        """Validates user's input
+        for futher info read constants.py and model.
+        """
         try:
-            user_coor = self.view.text_coordinates.get("1.0", "end-1c")
-            if needless(user_coor):
-                # If there is not user's input
-                # it will generate coordinates randomly
-                # and print out coordinates in the textfield.
-                self.model.validate_entryCities(self.view.entryCities.get())
-                self.model.generate_coordinates()
-                self.view.print_coordinates(self.model.coordinates)
+            userCoor = self.view.textCoordinates.get("1.0", "end-1c")
+            if needless(userCoor):
+                """If there is not user's input
+                it will generate coordinates randomly
+                and print out coordinates in the textfield."""
+                self.model.validateEntryCities(self.view.entryCities.get())
+                self.model.generateCoordinates()
+                self.view.printCoordinates(self.model.coordinates)
             else:    
-                self.model.parse_coordinates(user_coor)
+                self.model.parseCoordinates(userCoor)
 
-            self.iterations = self.model.validate_entryIterations(
+            self.iterations = self.model.validateEntryIterations(
                 self.view.entryIterations.get())
-            self.timer = self.model.validate_entryTimer(
+            self.timer = self.model.validateEntryTimer(
                 self.view.entryTimer.get())
         except InvalidIterationInput as E:
-            self.view.invalid_input(E)
+            self.view.invalidInput(E)
         except InvalidCityInput as E: 
-            self.view.invalid_input(E)
+            self.view.invalidInput(E)
         except InvalidTimerInput as E:
-            self.view.invalid_input(E)
+            self.view.invalidInput(E)
         except InvalidCoordinatesIndexInput as E:
-            self.view.invalid_input(E)
+            self.view.invalidInput(E)
         except InvalidCoordinatesInput as E:
-            self.view.invalid_input(E)
+            self.view.invalidInput(E)
         except InvalidCoordinatesRangeIndexInput as E:
-            self.view.invalid_input(E)
+            self.view.invalidInput(E)
         else:
-            self.valid_input = True
+            self.validInput = True
+
 
     def reset(self):
-        # Resets NOT all the values to default the main purpose
-        # is to observe how iterations, random seed are influencing the paths
-        # wouldn't be nice to reset all those again for each run.
-        # Coordinates remains after reset too, rest is reseted.
+        """Resets NOT all the values to default the main purpose
+        is to observe how iterations, random seed are influencing the paths
+        wouldn't be nice to reset all those again for each run.
+        Coordinates remains after reset too, rest is reseted.
+        """
         self.view.running = False
-        if not self.valid_input:
-            self.view.default_text_coordinates()
-        self.valid_input = False
-        self.view.clear_canvas()
-        self.view.stop_view()
+        if not self.validInput:
+            self.view.defaultTextCoordinates()
+        self.validInput = False
+        self.view.clearCanvas()
+        self.view.stopView()
         self.model.coordinates.clear()
-        self.best_path.clear()
-        self.best_distance = float("inf")
+        self.bestPath.clear()
+        self.bestDistance = float("inf")
         self.timer = TIMER
-        self.iteration_counter = 0
-        self.view.update_labels(0, float("inf"))
+        self.iterationCounter = 0
+        self.view.updateLabels(0, float("inf"))
+
 
     def update(self):
-        # This function is called after every iteration (X ms - timer),
-        # where two coordinates are swapped.
-        # If the limit is reached, iteration stops and the best path rendered.
-        if not (self.iterations > self.iteration_counter):
-            self.view.stop_view()
-            self.view.draw_best_path(self.best_path)
+        """This function is called after every iteration (X ms - timer),
+        where two coordinates are swapped.
+        If the limit is reached, iteration stops and the best path rendered.
+        """
+        if self.iterations <= self.iterationCounter:
+            self.view.stopView()
+            self.view.drawBestPath(self.bestPath)
             return
-        actual_distance = self.model.distance(self.view.lines_id)
-        if actual_distance < self.best_distance:
-            self.best_distance = actual_distance
-            self.best_path = self.model.coordinates[:]
+        actualDistance = self.model.distance(self.view.lines_id)
+        if actualDistance < self.bestDistance:
+            self.bestDistance = actualDistance
+            self.bestPath = self.model.coordinates[:]
 
         if self.view.running:
             self.model.shuffle()
-            self.view.delete_connections()
-            self.view.connect_cities(self.model.coordinates)
-            self.view.set_timer(self.timer)
-            self.iteration_counter += 1
-            self.view.update_labels(self.iteration_counter, self.best_distance)
+            self.view.deleteConnections()
+            self.view.connectCities(self.model.coordinates)
+            self.view.setTimer(self.timer)
+            self.iterationCounter += 1
+            self.view.updateLabels(self.iterationCounter, self.bestDistance)
+
 
 if __name__ == "__main__":
     tsp = Controller()
