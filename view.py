@@ -8,10 +8,10 @@ from utils import *
 
 
 class View(tk.Tk):
-    """Main class for view. Responsible for all the components in the view.
-    Which are visible and interactive for user.
+    """Main class for visualization. Responsible for all the components in view,
+    which are visible and interactive for user.
     """
-    PAD = 3 # Internal padding for mostly for frames. 
+    PAD = 3 # Internal padding, mostly for frames. 
 
 
     def __init__(self, controller):
@@ -47,7 +47,7 @@ class View(tk.Tk):
 
 
     def stopView(self):
-        """Breaks the after call because was causing a bug."""
+        """Breaks the after call because it was causing a bug."""
         if self.running:
             self.after_cancel(self.after_root)
     
@@ -62,8 +62,9 @@ class View(tk.Tk):
 
     def drawBestPath(self, bestPath):
         """Draws the best path that was found.
-        Best path is highlighted with red and wider line,
-        also decided to implement numbers for each city (where to start).
+        Best path is highlighted with wider red lines.
+        I also decided to implement numbers for each city, to indicate
+        where to start.
         """
         self.deleteConnections()
         self.connectCities(bestPath, width=3, fill="red")
@@ -72,7 +73,7 @@ class View(tk.Tk):
 
 
     def printCoordinates(self, coordinates):
-        """Fill textfield with coordinates which were generated."""
+        """Fills textfield with generated coordinates."""
         self.textCoordinates.delete("1.0", "end")
         for coor in coordinates:
             x, y = coor
@@ -122,7 +123,7 @@ class View(tk.Tk):
 
 
     def _makeButton(self, txt):
-        """A bit ugly solution but only for two buttons...
+        """A bit of an ugly solution for only two buttons...
         This seems more reasonable to me.
         """
         cmd = self.controller.start
@@ -156,17 +157,17 @@ class View(tk.Tk):
 
 
     def _create_circle(self, x, y, r=RADIUS, **kwargs):
-        """Because tkinter doesn't provide a circle by given x, y and radius
-        but only by x1, y1, x2, y3 (impractical).
-        I've made my own method that works in this way.
+        """Tkinter doesn't provide a circle by given x, y and radius
+        but only by x1, y1, x2, y2 (impractical).
+        I've made my own method that works in that way.
         """
         self.canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
 
     def _city_numbers(self, bestPath):
-        """This function add a number label for each city.
+        """This function adds a number label for each city.
         I decided to make colors to scale with every number.
-        It begins with 255 - full red here, and is substracting for each city.
+        It begins with 255 - full red - and substracts for each city.
         """
         col = 255
         for i in range(len(bestPath)):
@@ -182,7 +183,7 @@ class View(tk.Tk):
 
 
     def drawCities(self, coor, colorful=False, **kwargs):
-        """Similar to previous method that scale colors with each city.
+        """Similar to previous method that scales colors with each city.
         This is similar but only for city - circle
         """
         if colorful:
@@ -197,9 +198,9 @@ class View(tk.Tk):
 
 
     def connectCities(self, coor, **kwargs):
-        """Each connection have to be stored.
-        One possible solution would be have another frame and clear
-        only the fram but this is also usefull for measuring distance in model.
+        """Each connection has to be stored.
+        One possible solution would be to have another frame and clear
+        only the frame but this is also usefull for measuring distance in model.
         """
         self.lines_id = {}
         for i in range(len(coor) - 1):

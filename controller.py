@@ -18,7 +18,7 @@ class Controller():
         self.view = View(self)
         self.timer = TIMER
         self.iterationCounter = 0
-        """Distance has to start with high number,
+        """Distance has to start with a high number,
         because even the first one can be the shortest."""
         self.bestDistance = float("inf")
         """Check for user's input."""
@@ -49,7 +49,7 @@ class Controller():
         try:
             userCoor = self.view.textCoordinates.get("1.0", "end-1c")
             if needless(userCoor):
-                """If there is not user's input
+                """If the user's input is not given,
                 it will generate coordinates randomly
                 and print out coordinates in the textfield."""
                 self.model.validateEntryCities(self.view.entryCities.get())
@@ -79,10 +79,10 @@ class Controller():
 
 
     def reset(self):
-        """Resets NOT all the values to default the main purpose
-        is to observe how iterations, random seed are influencing the paths
-        wouldn't be nice to reset all those again for each run.
-        Coordinates remains after reset too, rest is reseted.
+        """Resets SOME values to default. The main purpose
+        is to observe how iterations, random seeds are influencing the paths.
+        It wouldn't be nice to reset all those again for each run.
+        Coordinates remain after reset too, the rest is reseted.
         """
         self.view.running = False
         if not self.validInput:
@@ -99,9 +99,10 @@ class Controller():
 
 
     def update(self):
-        """This function is called after every iteration (X ms - timer),
-        where two coordinates are swapped.
-        If the limit is reached, iteration stops and the best path rendered.
+        """This function, called after every iteration (X ms - timer),
+        swaps two coordinates.
+        If the limit is reached, the iteration stops
+        and the best path is rendered.
         """
         if self.iterations <= self.iterationCounter:
             self.view.stopView()

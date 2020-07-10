@@ -9,11 +9,11 @@ certain help in one-place modification and default values.
 TIMER = 10
 ITERATIONS = 1000
 CITY_COUNT = 50
-"""This size of canvas well fits my resolution."""
+"""This size of canvas fits my resolution well."""
 WIDTH = 1200
 HEIGHT = 800
-"""Avoiding to render a city on 0,0 coordinates
-so I decided to shrink the canvas area.
+"""To avoid rendering a city on 0,0 coordinates,
+I decided to shrink the canvas area.
 """
 INDENTATION_EDGE = 100
 WIDTH_MAX = WIDTH - INDENTATION_EDGE
@@ -23,7 +23,7 @@ HEIGHT_MIN = INDENTATION_EDGE
 """Radius for city - circle"""
 RADIUS = 20
 """Less than 4 cities is senseless
-connection is always "same" (graph that only rotate the edges).
+connection is always "same" (graph that only rotates the edges).
 """
 MIN_CITY = 4
 DEFAULT_TEXT = f"""\

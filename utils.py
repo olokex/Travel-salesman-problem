@@ -12,5 +12,5 @@ def rgb2hex(rgb):
 
 
 def needless(text):
-    """Check if coordinates text is empty or with default text."""
+    """Check if coordinates' text is empty or with default text."""
     return len(text) == 0 or DEFAULT_TEXT == text

@@ -45,7 +45,7 @@ class Model():
 
     def generateCoordinates(self):
         """Generates coordinates x,y in shrinked area, 100 px from each side.
-        Avoiding to generate city with 0,0; 0,Y; X,0; etc.
+        Avoids generating city with 0,0; 0,Y; X,0; etc.
         """
         for i in range(self.cityCount):
             x = randint(WIDTH_MIN, WIDTH_MAX)
@@ -53,14 +53,14 @@ class Model():
             self.coordinates.append((x, y))
 
     def shuffle(self):
-        """Randomly swap two coordinates - new path established."""
+        """Randomly swaps two coordinates - new path is established."""
         sc = self.coordinates
         st = randint(0, len(sc) - 1)
         nd = randint(0, len(sc) - 1)
         sc[st], sc[nd] = sc[nd], sc[st]
 
     def _distanceTwoPoints(self, coordinates):
-        """Nothing else than Pythagoras theorem."""
+        """Nothing but Pythagoras theorem."""
         x1 = coordinates[0]
         y1 = coordinates[1]
         x2 = coordinates[2]

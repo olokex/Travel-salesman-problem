@@ -11,12 +11,12 @@ class MyExceptionBase(Exception):
 
 class InvalidCityInput(MyExceptionBase):
     def __str__(self):
-       return self.baseTxt + f"Cities has to be {MIN_CITY} or greater."
+       return self.baseTxt + f"Cities have to be {MIN_CITY} or greater."
 
 
 class InvalidIterationInput(MyExceptionBase):
     def __str__(self):
-        return self.baseTxt + "Iterations has to be greater or equal than 1."
+        return self.baseTxt + "Iterations have to be greater or equal than 1."
 
 
 class InvalidTimerInput(MyExceptionBase):
