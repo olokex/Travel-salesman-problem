@@ -31,8 +31,8 @@ class View(tk.Tk):
         self.entryIterations = self._makeEntry(ITERATIONS)
         self._makeLabel("Cities")
         self.entryCities = self._makeEntry(CITY_COUNT)
-        self._makeLabel("Timer (ms)")
-        self.entryTimer = self._makeEntry(TIMER)
+        self._makeLabel("Refresh (ms)")
+        self.entryREFRESH_TIME_MS = self._makeEntry(REFRESH_TIME_MS)
         self._makeButton("start")
         self._makeButton("reset")
 
@@ -41,9 +41,9 @@ class View(tk.Tk):
        self.mainloop()
 
 
-    def setTimer(self, timer):
+    def set_refresh(self, REFRESH_TIME_MS):
         """In tkinker you have to re-call a function to keep updated values."""
-        self.after_root = self.after(timer, self.controller.update)
+        self.after_root = self.after(REFRESH_TIME_MS, self.controller.update)
 
 
     def stopView(self):
@@ -156,7 +156,7 @@ class View(tk.Tk):
         self.labelBestDistanceCanvas.pack(side="left")
 
 
-    def _create_circle(self, x, y, r=RADIUS, **kwargs):
+    def _create_circle(self, x, y, r=RADIUS_CITY, **kwargs):
         """Tkinter doesn't provide a circle by given x, y and radius
         but only by x1, y1, x2, y2 (impractical).
         I've made my own method that works in that way.
@@ -194,7 +194,7 @@ class View(tk.Tk):
                 color -= int(255/len(coor))
         else:        
             for x, y in coor:
-                self._create_circle(x, y, RADIUS, fill="gray", **kwargs)
+                self._create_circle(x, y, RADIUS_CITY, fill="gray", **kwargs)
 
 
     def connectCities(self, coor, **kwargs):

@@ -6,11 +6,11 @@ This program works on Monte Carlo basis, where path is defined as coordinates in
 
 ### Algorithm
 1. Generate random list of coordinates
-* can be user's input as well
+- can be user's input as well
 2. Make sum of distance
 3. If distance is better than the shortest:
-..* store list of coordinates (copy)
-... store the best distance
+- store list of coordinates (copy)
+- store the best distance
 4. Randomly swap two coordinates
 5. If there still are iterations, goto 2;
 6. Print out the best path and distance

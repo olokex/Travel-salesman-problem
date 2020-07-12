@@ -16,7 +16,7 @@ class Controller():
     def __init__(self):
         self.model = Model()
         self.view = View(self)
-        self.timer = TIMER
+        self.refresh_time = REFRESH_TIME_MS
         self.iterationCounter = 0
         """Distance has to start with a high number,
         because even the first one can be the shortest."""
@@ -39,7 +39,7 @@ class Controller():
         self.view.running = True
         self.view.drawCities(self.model.coordinates)
         self.view.connectCities(self.model.coordinates)
-        self.view.setTimer(self.timer)
+        self.view.set_refresh(self.refresh_time)
 
 
     def _getUserInputs(self):
@@ -60,13 +60,13 @@ class Controller():
 
             self.iterations = self.model.validateEntryIterations(
                 self.view.entryIterations.get())
-            self.timer = self.model.validateEntryTimer(
-                self.view.entryTimer.get())
+            self.refresh_time = self.model.validateEntryTimer(
+                self.view.entryREFRESH_TIME_MS.get())
         except InvalidIterationInput as E:
             self.view.invalidInput(E)
         except InvalidCityInput as E: 
             self.view.invalidInput(E)
-        except InvalidTimerInput as E:
+        except InvalidREFRESH_TIME_MSInput as E:
             self.view.invalidInput(E)
         except InvalidCoordinatesIndexInput as E:
             self.view.invalidInput(E)
@@ -93,13 +93,13 @@ class Controller():
         self.model.coordinates.clear()
         self.bestPath.clear()
         self.bestDistance = float("inf")
-        self.timer = TIMER
+        self.refresh_time = REFRESH_TIME_MS
         self.iterationCounter = 0
         self.view.updateLabels(0, float("inf"))
 
 
     def update(self):
-        """This function, called after every iteration (X ms - timer),
+        """This function, called after every iteration (X ms - REFRESH_TIME_MS),
         swaps two coordinates.
         If the limit is reached, the iteration stops
         and the best path is rendered.
@@ -117,11 +117,6 @@ class Controller():
             self.model.shuffle()
             self.view.deleteConnections()
             self.view.connectCities(self.model.coordinates)
-            self.view.setTimer(self.timer)
+            self.view.set_refresh(self.refresh_time)
             self.iterationCounter += 1
             self.view.updateLabels(self.iterationCounter, self.bestDistance)
-
-
-if __name__ == "__main__":
-    tsp = Controller()
-    tsp.main()

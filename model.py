@@ -20,7 +20,7 @@ class Model():
     def parseCoordinates(self, text):
         lines = text.splitlines()
         count = len(lines)
-        if count < MIN_CITY:
+        if count < MIN_CITY_COUNT:
             raise InvalidCoordinatesInput(count)
 
         for i, line in enumerate(lines):
@@ -28,8 +28,8 @@ class Model():
                 coor = line.strip().split(",")
                 x = int(coor[0])
                 y = int(coor[1])
-                self._isInAllowedRange(x, WIDTH_MIN, WIDTH_MAX)
-                self._isInAllowedRange(y, HEIGHT_MIN, HEIGHT_MAX)
+                self._isInAllowedRange(x, BOUNDARY_LEFT, BOUNDARY_RIGHT)
+                self._isInAllowedRange(y, BOUNDARY_TOP, BOUNDARY_BOT)
                 self.coordinates.append((x, y))
             except InvalidAreaRange:
                 raise InvalidCoordinatesRangeIndexInput(i)
@@ -48,8 +48,8 @@ class Model():
         Avoids generating city with 0,0; 0,Y; X,0; etc.
         """
         for i in range(self.cityCount):
-            x = randint(WIDTH_MIN, WIDTH_MAX)
-            y = randint(HEIGHT_MIN, HEIGHT_MAX)
+            x = randint(BOUNDARY_LEFT, BOUNDARY_RIGHT)
+            y = randint(BOUNDARY_TOP, BOUNDARY_BOT)
             self.coordinates.append((x, y))
 
     def shuffle(self):
@@ -77,18 +77,18 @@ class Model():
         if not input.isdigit():
             raise InvalidCityInput(input)
         cityCount = int(input)
-        if not (cityCount >= MIN_CITY):
+        if not (cityCount >= MIN_CITY_COUNT):
             raise InvalidCityInput(input)
         self.cityCount = cityCount
 
 
     def validateEntryTimer(self, input):
         if not input.isdigit():
-            raise InvalidTimerInput(input)    
-        timer = int(input)
-        if not (timer >= 10):
-            raise InvalidTimerInput(input)    
-        return timer
+            raise InvalidREFRESH_TIME_MSInput(input)    
+        REFRESH_TIME_MS = int(input)
+        if not (REFRESH_TIME_MS >= 10):
+            raise InvalidREFRESH_TIME_MSInput(input)    
+        return REFRESH_TIME_MS
 
     def validateEntryIterations(self, input):
         if not input.isdigit():

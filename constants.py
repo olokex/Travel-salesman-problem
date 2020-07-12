@@ -6,7 +6,7 @@ certain help in one-place modification and default values.
 """
 
 """10 ms seem like the best lowest working value as refresh rate."""
-TIMER = 10
+REFRESH_TIME_MS = 10
 ITERATIONS = 1000
 CITY_COUNT = 50
 """This size of canvas fits my resolution well."""
@@ -16,24 +16,24 @@ HEIGHT = 800
 I decided to shrink the canvas area.
 """
 INDENTATION_EDGE = 100
-WIDTH_MAX = WIDTH - INDENTATION_EDGE
-HEIGHT_MAX = HEIGHT - INDENTATION_EDGE
-WIDTH_MIN = INDENTATION_EDGE
-HEIGHT_MIN = INDENTATION_EDGE
+BOUNDARY_RIGHT = WIDTH - INDENTATION_EDGE
+BOUNDARY_BOT = HEIGHT - INDENTATION_EDGE
+BOUNDARY_LEFT = INDENTATION_EDGE
+BOUNDARY_TOP = INDENTATION_EDGE
 """Radius for city - circle"""
-RADIUS = 20
+RADIUS_CITY = 20
 """Less than 4 cities is senseless
 connection is always "same" (graph that only rotates the edges).
 """
-MIN_CITY = 4
+MIN_CITY_COUNT = 4
 DEFAULT_TEXT = f"""\
 Line represents
 a city.
 Each line only one
 coordinate x,y.
 Coordinates has to  be in certain range
-x: {WIDTH_MIN}-{WIDTH_MAX}
-y: {HEIGHT_MIN}-{HEIGHT_MAX}
+x: {BOUNDARY_LEFT}-{BOUNDARY_RIGHT}
+y: {BOUNDARY_TOP}-{BOUNDARY_BOT}
 
 Otherwise gonna be 
 generated randomly."""

@@ -11,7 +11,7 @@ class MyExceptionBase(Exception):
 
 class InvalidCityInput(MyExceptionBase):
     def __str__(self):
-       return self.baseTxt + f"Cities have to be {MIN_CITY} or greater."
+       return self.baseTxt + f"Cities have to be {MIN_CITY_COUNT} or greater."
 
 
 class InvalidIterationInput(MyExceptionBase):
@@ -19,14 +19,14 @@ class InvalidIterationInput(MyExceptionBase):
         return self.baseTxt + "Iterations have to be greater or equal than 1."
 
 
-class InvalidTimerInput(MyExceptionBase):
+class InvalidREFRESH_TIME_MSInput(MyExceptionBase):
     def __str__(self):
-        return self.baseTxt + "Timer has to be greater than 10."
+        return self.baseTxt + "Refresh rate has to be greater than 10."
 
 
 class InvalidCoordinatesInput(Exception):
     def __init__(self, lineIndex):
-        self.baseTxt = f"There must be more than {lineIndex} lines to parse coordinates ({MIN_CITY}+)"
+        self.baseTxt = f"There must be more than {lineIndex} lines to parse coordinates ({MIN_CITY_COUNT}+)"
 
     def __str__(self):
         return self.baseTxt
