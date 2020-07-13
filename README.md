@@ -20,4 +20,4 @@ Created with the purpose of studying MVC and OOP in Python with tkinter as GUI.
 
 ## Run and usage
 Required **Python 3.7+**; tkinter should be included in standard library.
-To run the code, open terminal in project folder and type `python controller.py`
+To run the code, open terminal in project folder and type `python main.py`
